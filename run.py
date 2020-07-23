@@ -54,4 +54,5 @@ async def post_user_and_author(user: User, author: Author):
 @app.post("/user/photo")
 async def upload_user_photo(response: Response, profile_photo: bytes = File(...)):
     response.headers["x-file-size"] = str(len(profile_photo))
+    response.set_cookie(key="cookie-api", value="test")
     return {"file size": len(profile_photo)}
