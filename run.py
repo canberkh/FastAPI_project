@@ -1,8 +1,9 @@
-from fastapi import FastAPI, Body, Header
+from fastapi import FastAPI, Body, Header, File
 from models.user import User
 from models.book import Book
 from models.author import Author
 from starlette.status import HTTP_201_CREATED
+from starlette.responses import Response
 
 app = FastAPI()
 
@@ -49,3 +50,8 @@ async def patch_author_name(name: str = Body(..., embed=True)):
 @app.post("/user/author")
 async def post_user_and_author(user: User, author: Author):
     return {"user": user, "author": author}
+
+@app.post("/user/photo")
+async def upload_user_photo(response: Response, profile_photo: bytes = File(...)):
+    response.headers["x-file-size"] = str(len(profile_photo))
+    return {"file size": len(profile_photo)}
